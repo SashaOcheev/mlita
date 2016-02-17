@@ -128,7 +128,7 @@ void kingStep(std::queue<Coor> &kill, std::queue<Coor> &wave, Mat board, Coor st
 
 int Func(Coor size, Figures figures, Coor start)
 {
-	if (!figures.size())
+	if (figures.empty())
 		return 0;
 
 	Mat board;
@@ -143,7 +143,7 @@ int Func(Coor size, Figures figures, Coor start)
 	std::queue<Coor> kill;
 	std::queue<Coor> wave;
 	wave.push(start);
-	while (!wave.empty() && figures.size())
+	while (!wave.empty())
 	{
 		start = wave.front();
 		wave.pop();
@@ -157,31 +157,26 @@ int Func(Coor size, Figures figures, Coor start)
 		kingStep(kill, wave, board, start, Coor(0, -1));
 	}
 
-	if (!kill.size())
-		return -1;
-
 	int min = -1;
-	while (kill.size())
+	while (!kill.empty())
 	{
 		Coor tempKill = kill.front();
 		kill.pop();
 		Figures tempFigures = figures;
-		for (Figures::iterator it = tempFigures.begin(); it != tempFigures.end();)
+		for (Figures::iterator it = tempFigures.begin(); it != tempFigures.end(); it++)
 		{
 			if (it->i == tempKill.i && it->j == tempKill.j)
 			{
-				tempFigures.erase(it++);
+				tempFigures.erase(it);
 				break;
 			}
-			else
-				it++;
 		}
 		int temp = Func(size, tempFigures, tempKill);
 		if (temp >= 0)
 		{
-			if (min == -1)
+			if (min < 0)
 				min = temp + board[tempKill.i][tempKill.j];
-			else if (temp + board[tempKill.i][tempKill.j] < min + board[tempKill.i][tempKill.j])
+			else if (temp + board[tempKill.i][tempKill.j] < min)
 				min = temp + board[tempKill.i][tempKill.j];
 		}
 	}
@@ -190,7 +185,7 @@ int Func(Coor size, Figures figures, Coor start)
 
 int main()
 {
-	std::ifstream fin("input1.txt", std::ios_base::in);
+	std::ifstream fin("input.txt", std::ios_base::in);
 
 	Coor size;
 	fin >> size.i >> size.j;
