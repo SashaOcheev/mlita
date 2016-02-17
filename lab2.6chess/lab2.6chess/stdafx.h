@@ -11,7 +11,8 @@
 #include <tchar.h>
 #include <iostream>
 #include <fstream>
-#include <list>;
+#include <list>
+#include <queue>
 
 
 // TODO: Установите здесь ссылки на дополнительные заголовки, требующиеся для программы
