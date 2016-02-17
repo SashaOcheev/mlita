@@ -116,23 +116,21 @@ void Filling(Mat board, const Coor size, Figures figures)
 void kingStep(std::queue<Coor> &kill, std::queue<Coor> &wave, Mat board, Coor start, Coor shift)
 {
 	Coor newPos(start.i + shift.i, start.j + shift.j);
-	if (board[newPos.i][newPos.j] > -4)
+	if (board[newPos.i][newPos.j] > -4 && board[newPos.i][newPos.j] <= 0)
 	{
 		if (board[newPos.i][newPos.j] == 0)
-		{
-			board[newPos.i][newPos.j] = board[start.i][start.j] + 1;
 			wave.push(newPos);
-		}
-		else if (board[newPos.i][newPos.j] < 0)
-		{
+		else
 			kill.push(newPos);
-			board[newPos.i][newPos.j] = -4;
-		}
+		board[newPos.i][newPos.j] = board[start.i][start.j] + 1;
 	}
 }
 
 int Func(Coor size, Figures figures, Coor start)
 {
+	if (!figures.size())
+		return 0;
+
 	Mat board;
 	for (int i = 0; i < size.i; i++)
 		for (int j = 0; j < size.j; j++)
@@ -141,7 +139,7 @@ int Func(Coor size, Figures figures, Coor start)
 			else
 				board[i][j] = 0;
 	Filling(board, size, figures);
-	
+
 	std::queue<Coor> kill;
 	std::queue<Coor> wave;
 	wave.push(start);
@@ -159,33 +157,43 @@ int Func(Coor size, Figures figures, Coor start)
 		kingStep(kill, wave, board, start, Coor(0, -1));
 	}
 
-	int res = 0;
+	if (!kill.size())
+		return -1;
+
 	int min = -1;
 	while (kill.size())
 	{
 		Coor tempKill = kill.front();
 		kill.pop();
 		Figures tempFigures = figures;
-		for (Figures::iterator it = tempFigures.begin(); it != tempFigures.end(); it++)
+		for (Figures::iterator it = tempFigures.begin(); it != tempFigures.end();)
+		{
 			if (it->i == tempKill.i && it->j == tempKill.j)
-				tempFigures.erase(it);
+			{
+				tempFigures.erase(it++);
+				break;
+			}
+			else
+				it++;
+		}
 		int temp = Func(size, tempFigures, tempKill);
-		if (min == -1 || temp + board[tempKill.i][tempKill.j] < min + board[tempKill.i][tempKill.j])
-			min = temp + board[tempKill.i][tempKill.j];
+		if (temp >= 0)
+		{
+			if (min == -1)
+				min = temp + board[tempKill.i][tempKill.j];
+			else if (temp + board[tempKill.i][tempKill.j] < min + board[tempKill.i][tempKill.j])
+				min = temp + board[tempKill.i][tempKill.j];
+		}
 	}
-
-	res = min;
-	return res;
+	return min;
 }
 
 int main()
 {
-	std::ifstream fin("input.txt", std::ios_base::in);
+	std::ifstream fin("input1.txt", std::ios_base::in);
 
 	Coor size;
 	fin >> size.i >> size.j;
-	size.i += 2;
-	size.j += 2;
 	fin.get();
 
 	char ch;
@@ -214,9 +222,11 @@ int main()
 		}
 		fin.get();
 	}
+	size.i += 2;
+	size.j += 2;
 
-	Func(size, figures, start);
-
+	int temp = Func(size, figures, start);
 	std::ofstream fout("output.txt", std::ios_base::out | std::ios_base::trunc);
+	fout << temp;
 	return 0;
 }
