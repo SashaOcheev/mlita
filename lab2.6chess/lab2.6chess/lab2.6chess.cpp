@@ -6,10 +6,11 @@
 
 struct Figure
 {
-	int i;
-	int j;
+	int ln;
+	int col;
+	bool isAlive;
 	int val;
-	Figure(int x, int y, int value);
+	Figure(int Ln, int Col, int value);
 };
 
 const int SIZE = 15;
@@ -18,41 +19,42 @@ typedef std::list<Figure> Figures;
 
 struct Coor
 {
-	int i;
-	int j;
-	Coor(int I = 0, int J = 0);
+	int ln;
+	int col;
+	Coor(int Ln = 0, int Col = 0);
 };
 
-bool Move(Mat board, const Coor size, const Figure figure, const int i, const int j);
-void OneFigureStep(Mat board, const Coor size, Figure figure, const int i, const int j);
-void Bishop(Mat board, const Coor size, Figure figure);
-void Rook(Mat board, const Coor size, Figure figure);
-void Knight(Mat board, const Coor size, Figure figure);
-void Filling(Mat board, const Coor size, Figures figures);
-void kingStep(std::queue<Coor> &kill, std::queue<Coor> &wave, Mat board, Coor start, Coor shift);
-int Func(Coor size, Figures figures, Coor start);
+bool Move(Mat board, const Coor &size, const Figure &figure, const int ln, const int col);
+void OneFigureStep(Mat board, const Coor &size, Figure &figure, const int ln, const int col);
+void Bishop(Mat board, const Coor &size, Figure &figure);
+void Rook(Mat board, const Coor &size, Figure &figure);
+void Knight(Mat board, const Coor &size, Figure &figure);
+void Filling(Mat board, const Coor &size, Figures &figures);
+void kingStep(std::queue<Coor> &kill, std::queue<Coor> &wave, Mat board, Coor &start, Coor &shift);
+int Func(Coor &size, Figures figures, Coor start);
 
-Coor::Coor(int I, int J)
+Coor::Coor(int Ln, int Col)
 {
-	i = I;
-	j = J;
+	ln = Ln;
+	col = Col;
 }
 
 Figure::Figure(int x, int y, int value)
 {
-	i = x;
-	j = y;
+	ln = x;
+	col = y;
+	isAlive = true;
 	val = value;
 }
 
-bool Move(Mat board, const Coor size, const Figure figure, const int i, const int j)
+bool Move(Mat board, const Coor &size, const Figure &figure, const int ln, const int col)
 {
-	if (figure.i + i >= 0 && figure.i + i < size.i && figure.j + j >= 0 && figure.j + j < size.j && board[figure.i + i][figure.j + j] >= -4)
+	if (figure.ln + ln >= 0 && figure.ln + ln < size.ln && figure.col + col >= 0 && figure.col + col < size.col && board[figure.ln + ln][figure.col + col] >= -4)
 	{
-		if (board[figure.i + i][figure.j + j] > -4)
+		if (board[figure.ln + ln][figure.col + col] > -4)
 		{
-			board[figure.i + i][figure.j + j] -= 4;
-			if (board[figure.i + i][figure.j + j] < -4)
+			board[figure.ln + ln][figure.col + col] -= 4;
+			if (board[figure.ln + ln][figure.col + col] < -4)
 				return false;
 		}
 		return true;
@@ -60,17 +62,17 @@ bool Move(Mat board, const Coor size, const Figure figure, const int i, const in
 	return false;
 }
 
-void OneFigureStep(Mat board, const Coor size, Figure figure, const int i, const int j)
+void OneFigureStep(Mat board, const Coor &size, Figure &figure, const int ln, const int col)
 {
-	if (Move(board, size, figure, i, j))
+	if (Move(board, size, figure, ln, col))
 	{
-		figure.i += i;
-		figure.j += j;
-		OneFigureStep(board, size, figure, i, j);
+		figure.ln += ln;
+		figure.col += col;
+		OneFigureStep(board, size, figure, ln, col);
 	}
 }
 
-void Bishop(Mat board, const Coor size, Figure figure)
+void Bishop(Mat board, const Coor &size, Figure &figure)
 {
 	OneFigureStep(board, size, figure, -1, -1);
 	OneFigureStep(board, size, figure, -1, 1);
@@ -78,7 +80,7 @@ void Bishop(Mat board, const Coor size, Figure figure)
 	OneFigureStep(board, size, figure, 1, -1);
 }
 
-void Rook(Mat board, const Coor size, Figure figure)
+void Rook(Mat board, const Coor &size, Figure &figure)
 {
 	OneFigureStep(board, size, figure, -1, 0);
 	OneFigureStep(board, size, figure, 0, -1);
@@ -86,7 +88,7 @@ void Rook(Mat board, const Coor size, Figure figure)
 	OneFigureStep(board, size, figure, 1, 0);
 }
 
-void Knight(Mat board, const Coor size, Figure figure)
+void Knight(Mat board, const Coor &size, Figure &figure)
 {
 	Move(board, size, figure, -2, -1);
 	Move(board, size, figure, -2, 1);
@@ -98,10 +100,10 @@ void Knight(Mat board, const Coor size, Figure figure)
 	Move(board, size, figure, -1, -2);
 }
 
-void Filling(Mat board, const Coor size, Figures figures)
+void Filling(Mat board, const Coor &size, Figures &figures)
 {
 	for (Figures::iterator it = figures.begin(); it != figures.end(); it++)
-		board[it->i][it->j] = it->val;
+		board[it->ln][it->col] = it->val;
 	for (Figures::iterator it = figures.begin(); it != figures.end(); it++)
 	{
 		if (it->val == -1)
@@ -113,28 +115,28 @@ void Filling(Mat board, const Coor size, Figures figures)
 	}
 }
 
-void kingStep(std::queue<Coor> &kill, std::queue<Coor> &wave, Mat board, Coor start, Coor shift)
+void kingStep(std::queue<Coor> &kill, std::queue<Coor> &wave, Mat board, Coor &start, Coor &shift)
 {
-	Coor newPos(start.i + shift.i, start.j + shift.j);
-	if (board[newPos.i][newPos.j] > -4 && board[newPos.i][newPos.j] <= 0)
+	Coor newPos(start.ln + shift.ln, start.col + shift.col);
+	if (board[newPos.ln][newPos.col] > -4 && board[newPos.ln][newPos.col] <= 0)
 	{
-		if (board[newPos.i][newPos.j] == 0)
+		if (board[newPos.ln][newPos.col] == 0)
 			wave.push(newPos);
 		else
 			kill.push(newPos);
-		board[newPos.i][newPos.j] = board[start.i][start.j] + 1;
+		board[newPos.ln][newPos.col] = board[start.ln][start.col] + 1;
 	}
 }
 
-int Func(Coor size, Figures figures, Coor start)
+int Func(Coor &size, Figures figures, Coor start)
 {
 	if (figures.empty())
 		return 0;
 
 	Mat board;
-	for (int i = 0; i < size.i; i++)
-		for (int j = 0; j < size.j; j++)
-			if (i == 0 || j == 0 || i == size.i - 1 || j == size.j - 1)
+	for (int i = 0; i < size.ln; i++)
+		for (int j = 0; j < size.col; j++)
+			if (i == 0 || j == 0 || i == size.ln - 1 || j == size.col - 1)
 				board[i][j] = -4;
 			else
 				board[i][j] = 0;
@@ -165,7 +167,7 @@ int Func(Coor size, Figures figures, Coor start)
 		Figures tempFigures = figures;
 		for (Figures::iterator it = tempFigures.begin(); it != tempFigures.end(); it++)
 		{
-			if (it->i == tempKill.i && it->j == tempKill.j)
+			if (it->ln == tempKill.ln && it->col == tempKill.col)
 			{
 				tempFigures.erase(it);
 				break;
@@ -174,10 +176,8 @@ int Func(Coor size, Figures figures, Coor start)
 		int temp = Func(size, tempFigures, tempKill);
 		if (temp >= 0)
 		{
-			if (min < 0)
-				min = temp + board[tempKill.i][tempKill.j];
-			else if (temp + board[tempKill.i][tempKill.j] < min)
-				min = temp + board[tempKill.i][tempKill.j];
+			if (min < 0 || temp + board[tempKill.ln][tempKill.col] < min)
+				min = temp + board[tempKill.ln][tempKill.col];
 		}
 	}
 	return min;
@@ -185,26 +185,26 @@ int Func(Coor size, Figures figures, Coor start)
 
 int main()
 {
-	std::ifstream fin("input.txt", std::ios_base::in);
+	std::ifstream fin("04", std::ios_base::in);
 
 	Coor size;
-	fin >> size.i >> size.j;
+	fin >> size.ln >> size.col;
 	fin.get();
 
 	char ch;
 	Figures figures;
 	
 	Coor start;
-	for (int i = 0; i < size.i; i++)
+	for (int i = 0; i < size.ln; i++)
 	{
-		for (int j = 0; j < size.j; j++)
+		for (int j = 0; j < size.col; j++)
 		{
 			int val = 0;
 			ch = fin.get();
 			if (ch == '*')
 			{
-				start.i = i + 1;
-				start.j = j + 1;
+				start.ln = i + 1;
+				start.col = j + 1;
 			}
 			else if (ch == 'K')
 				val = -1;//конь
@@ -217,8 +217,8 @@ int main()
 		}
 		fin.get();
 	}
-	size.i += 2;
-	size.j += 2;
+	size.ln += 2;
+	size.col += 2;
 
 	int temp = Func(size, figures, start);
 	std::ofstream fout("output.txt", std::ios_base::out | std::ios_base::trunc);
