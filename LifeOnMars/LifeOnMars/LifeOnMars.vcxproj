@@ -19,9 +19,9 @@
     </ProjectConfiguration>
   </ItemGroup>
   <PropertyGroup Label="Globals">
-    <ProjectGuid>{DFFEF64C-77FF-43FB-BD78-95C63BDF7E2D}</ProjectGuid>
+    <ProjectGuid>{2B428E05-FB69-4D59-94BD-CF3252B1F0B7}</ProjectGuid>
     <Keyword>Win32Proj</Keyword>
-    <RootNamespace>lab26chess</RootNamespace>
+    <RootNamespace>LifeOnMars</RootNamespace>
     <WindowsTargetPlatformVersion>8.1</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
@@ -141,11 +141,12 @@
     <Text Include="ReadMe.txt" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="LifeOnMars.h" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="targetver.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="lab2.6chess.cpp" />
+    <ClCompile Include="LifeOnMars.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
