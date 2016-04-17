@@ -82,3 +82,18 @@ void CGraph::SortEdges()
 		return first.sqrDist < second.sqrDist;
 	});
 }
+
+long RunProgram(CGraph & graph, std::string const& inputFileName, std::string const& outputFileName)
+{
+	auto startTime = std::clock();
+
+	std::ifstream inputFile(inputFileName);
+
+	graph.InitFromText(inputFile);
+	auto res = graph.RunAlgorithm();
+
+	std::ofstream outputFile(outputFileName);
+	outputFile << std::fixed << std::setprecision(2) << res << std::endl;
+
+	return std::clock() - startTime;
+}

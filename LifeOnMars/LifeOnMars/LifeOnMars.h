@@ -2,9 +2,6 @@
 
 #include "stdafx.h"
 
-#include "stdafx.h"
-
-long SqrOfDist(int x, int y);
 
 struct Vertex
 {
@@ -48,3 +45,6 @@ private:
 	size_t m_limit;
 	int m_speed;
 };
+
+long RunProgram(CGraph & graph, std::string const& inputFileName, std::string const& outputFileName);
+long SqrOfDist(int x, int y);
