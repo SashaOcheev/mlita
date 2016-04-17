@@ -3,8 +3,8 @@ import random
 fileName = "input.txt"
 
 count = 1000
-limit = 10
-speed = 2
+limit = 1
+speed = 1
 
 f = open(fileName, "w")
 

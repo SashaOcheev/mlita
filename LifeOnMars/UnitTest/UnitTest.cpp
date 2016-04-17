@@ -51,11 +51,34 @@ BOOST_AUTO_TEST_SUITE(LifeOnMars_test)
 	};
 
 
-	BOOST_FIXTURE_TEST_CASE(small_file, Fixture)
+	BOOST_FIXTURE_TEST_CASE(count_of_cities_is_less_than_desired, Fixture)
 	{
 		BOOST_CHECK(RunTest("input1.txt", "output1.txt", "output1.txt"));
+	}
+
+	BOOST_FIXTURE_TEST_CASE(count_of_cities_is_equal_desired, Fixture)
+	{
 		BOOST_CHECK(RunTest("input2.txt", "output2.txt", "output2.txt"));
+	}
+
+	BOOST_FIXTURE_TEST_CASE(normal_test_1, Fixture)
+	{
 		BOOST_CHECK(RunTest("input3.txt", "output3.txt", "output3.txt"));
+	}
+
+	BOOST_FIXTURE_TEST_CASE(normal_test_2, Fixture)
+	{
+		BOOST_CHECK(RunTest("input4.txt", "output4.txt", "output4.txt"));
+	}
+
+	BOOST_FIXTURE_TEST_CASE(big_test, Fixture)
+	{
+		BOOST_CHECK(RunTest("input5.txt", "output5.txt", "output5.txt"));
+	}
+
+	BOOST_FIXTURE_TEST_CASE(biggest_test, Fixture)
+	{
+		BOOST_CHECK(RunTest("input6.txt", "output6.txt", "output6.txt"));
 	}
 
 BOOST_AUTO_TEST_SUITE_END()
