@@ -12,6 +12,7 @@
 #include <tchar.h>
 #include <string>
 #include <ctime>
+#include <functional>
 
 // TODO: reference additional headers your program requires here
 #define BOOST_TEST_MODULE LifeOnMarsTest

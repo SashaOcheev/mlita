@@ -46,5 +46,5 @@ private:
 	int m_speed;
 };
 
-long RunProgram(CGraph & graph, std::string const& inputFileName, std::string const& outputFileName);
+void RunProgram(CGraph & graph, std::string const& inputFileName, std::string const& outputFileName);
 long SqrOfDist(int x, int y);

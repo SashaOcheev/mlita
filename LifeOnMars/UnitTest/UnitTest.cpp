@@ -13,9 +13,16 @@ bool IsFilesEqual(std::string const& fileName1, std::string const& fileName2)
 	return !system(command.c_str());
 }
 
+long MeasureRunProgramTime(CGraph & graph, std::string const& inName, std::string const& outName)
+{
+	auto start = std::clock();
+	RunProgram(graph, inName, outName);
+	return std::clock() - start;
+}
+
 bool IsProgramWorkCorrect(CGraph & graph, std::string const& inName, std::string const& outName, std::string const& ethalonOutName, const long maxTime = 2000)
 {
-	auto time = RunProgram(graph, inName, outName);
+	auto time = MeasureRunProgramTime(graph, inName, outName);
 	return IsFilesEqual(outName, ethalonOutName) && time < maxTime;
 }
 

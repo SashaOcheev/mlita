@@ -83,10 +83,8 @@ void CGraph::SortEdges()
 	});
 }
 
-long RunProgram(CGraph & graph, std::string const& inputFileName, std::string const& outputFileName)
+void RunProgram(CGraph & graph, std::string const& inputFileName, std::string const& outputFileName)
 {
-	auto startTime = std::clock();
-
 	std::ifstream inputFile(inputFileName);
 
 	graph.InitFromText(inputFile);
@@ -94,6 +92,4 @@ long RunProgram(CGraph & graph, std::string const& inputFileName, std::string co
 
 	std::ofstream outputFile(outputFileName);
 	outputFile << std::fixed << std::setprecision(2) << res << std::endl;
-
-	return std::clock() - startTime;
 }
