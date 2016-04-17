@@ -15,7 +15,8 @@ bool IsFilesEqual(std::string const& fileName1, std::string const& fileName2)
 
 bool IsProgramWorkCorrect(CGraph & graph, std::string const& inName, std::string const& outName, std::string const& ethalonOutName, const long maxTime = 2000)
 {
-	return RunProgram(graph, inName, outName) < maxTime && IsFilesEqual(outName, ethalonOutName);
+	auto time = RunProgram(graph, inName, outName);
+	return IsFilesEqual(outName, ethalonOutName) && time < maxTime;
 }
 
 
