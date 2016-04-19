@@ -81,4 +81,14 @@ BOOST_AUTO_TEST_SUITE(LifeOnMars_test)
 		BOOST_CHECK(RunTest("input6.txt", "output6.txt", "output6.txt"));
 	}
 
+	BOOST_FIXTURE_TEST_CASE(inp_7, Fixture)
+	{
+		BOOST_CHECK(RunTest("input7.txt", "output7.txt", "output7.txt"));
+	}
+
+	BOOST_FIXTURE_TEST_CASE(inp_8, Fixture)
+	{
+		BOOST_CHECK(RunTest("input8.txt", "output8.txt", "output8.txt"));
+	}
+
 BOOST_AUTO_TEST_SUITE_END()
