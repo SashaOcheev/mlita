@@ -7,22 +7,14 @@ struct Vertex
 {
 	int x;
 	int y;
-	std::shared_ptr<size_t> ptrTag;
-
-	Vertex() = default;
-
-	Vertex(int X, int Y, size_t tag);
+	size_t compNumber;
 };
 
 struct Edge
 {
-	std::shared_ptr<Vertex> ptrFirst;
-	std::shared_ptr<Vertex> ptrSecond;
+	size_t first;
+	size_t second;
 	long sqrDist;
-
-	Edge() = default;
-
-	Edge(std::shared_ptr<Vertex> const& First, std::shared_ptr<Vertex> const& Second);
 };
 
 class CGraph
@@ -38,8 +30,9 @@ private:
 	void InitEdges();
 	void SortEdges();
 
-	std::vector<std::shared_ptr<Vertex> > m_verticies;
+	std::vector<Vertex> m_verticies;
 	std::vector<Edge> m_edges;
+	std::vector<std::vector<size_t> > m_components;
 
 	size_t m_count;
 	size_t m_limit;

@@ -12,7 +12,7 @@
 int main(int argc, char* argv[])
 {
 	CGraph graph;
-	std::cout << RunProgram(graph, "input.txt", "output.txt") << std::endl;
+	RunProgram(graph, "input9.txt", "output9.txt");
 
 	return 0;
 }

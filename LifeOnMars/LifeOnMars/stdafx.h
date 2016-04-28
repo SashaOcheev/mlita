@@ -17,8 +17,7 @@
 #include <iomanip>
 #include <memory>
 #include <ctime>
-#include <typeinfo>
-
+#include <list>
 
 
 // TODO: reference additional headers your program requires here

@@ -10,21 +10,6 @@ long SqrOfDist(int x, int y)
 };
 
 
-Vertex::Vertex(int X, int Y, size_t tag)
-{
-	x = X;
-	y = Y;
-	ptrTag = std::make_shared<size_t>(tag);
-}
-
-Edge::Edge(std::shared_ptr<Vertex> const& First, std::shared_ptr<Vertex> const& Second)
-{
-	ptrFirst = First;
-	ptrSecond = Second;
-	sqrDist = SqrOfDist(ptrFirst->x, ptrSecond->x) + SqrOfDist(ptrFirst->y, ptrSecond->y);
-};
-
-
 void CGraph::InitFromText(std::istream & in)
 {
 	in >> m_count >> m_limit >> m_speed;
@@ -42,10 +27,22 @@ float CGraph::RunAlgorithm()
 	size_t compCount = m_count;
 	for (size_t i = 0; compCount > m_limit; i++)
 	{
-		if (m_edges[i].ptrFirst->ptrTag != m_edges[i].ptrSecond->ptrTag)
+		auto firstCompNumb = m_verticies[m_edges[i].first].compNumber;
+		auto secondCompNumb = m_verticies[m_edges[i].second].compNumber;
+
+		if (firstCompNumb != secondCompNumb)
 		{
 			compCount--;
-			m_edges[i].ptrSecond->ptrTag = m_edges[i].ptrFirst->ptrTag;
+
+			for (size_t j = 0; j < m_components[secondCompNumb].size(); j++)
+			{
+				m_verticies[m_edges[i].second].compNumber = firstCompNumb;
+				m_verticies[m_components[secondCompNumb][j]].compNumber = firstCompNumb;
+				m_components[firstCompNumb].push_back(m_components[secondCompNumb][j]);
+			}
+
+			m_components[secondCompNumb].clear();
+
 			currentTime = static_cast<float>(m_edges[i].sqrDist) / static_cast<float>(speed);
 		}
 	}
@@ -55,12 +52,17 @@ float CGraph::RunAlgorithm()
 void CGraph::ReadVerticies(std::istream & in)
 {
 	m_verticies.resize(m_count);
+	m_components.resize(m_count);
 
 	for (size_t i = 0; i < m_verticies.size(); i++)
 	{
 		int x, y;
 		in >> x >> y;
-		m_verticies[i] = std::make_shared<Vertex>(x, y, i);
+		m_verticies[i].x = x;
+		m_verticies[i].y = y;
+		m_verticies[i].compNumber = i;
+
+		m_components[i].push_back(i);
 	}
 }
 
@@ -71,7 +73,12 @@ void CGraph::InitEdges()
 	size_t number = 0;
 	for (size_t i = 0; i < m_verticies.size() - 1; i++)
 		for (size_t j = i + 1; j < m_verticies.size(); j++, number++)
-			m_edges[number] = Edge(m_verticies[i], m_verticies[j]);
+		{
+			m_edges[number].first = i;
+			m_edges[number].second = j;
+			m_edges[number].sqrDist =
+				SqrOfDist(m_verticies[i].x, m_verticies[j].x) + SqrOfDist(m_verticies[i].y, m_verticies[j].y);
+		}
 }
 
 void CGraph::SortEdges()
