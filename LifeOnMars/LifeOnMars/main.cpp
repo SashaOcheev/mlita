@@ -12,7 +12,7 @@
 int main(int argc, char* argv[])
 {
 	CGraph graph;
-	RunProgram(graph, "input9.txt", "output9.txt");
+	RunProgram(graph, "input.txt", "output.txt");
 
 	return 0;
 }
