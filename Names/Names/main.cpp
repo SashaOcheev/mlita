@@ -12,7 +12,6 @@ int main()
 	obj.InitFromFile("input.txt");
 	obj.RunAlgorithm();
 	obj.PrintChildNameToFile("output.txt");
-
     return 0;
 }
 

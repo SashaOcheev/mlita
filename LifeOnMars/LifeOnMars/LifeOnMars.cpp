@@ -4,7 +4,7 @@
 #include "stdafx.h"
 #include "LifeOnMars.h"
 
-long SqrOfDist(int x, int y)
+int SqrOfDist(int x, int y)
 {
 	return (x - y) * (x - y);
 };
@@ -23,7 +23,7 @@ float CGraph::RunAlgorithm()
 {
 	int speed = m_speed * m_speed * 4;
 
-	float currentTime = 0.f;
+	int currentDist = 0;
 	size_t compCount = m_count;
 	for (size_t i = 0; compCount > m_limit; i++)
 	{
@@ -43,10 +43,10 @@ float CGraph::RunAlgorithm()
 
 			m_components[secondCompNumb].clear();
 
-			currentTime = static_cast<float>(m_edges[i].sqrDist) / static_cast<float>(speed);
+			currentDist = m_edges[i].sqrDist;
 		}
 	}
-	return sqrtf(currentTime);
+	return sqrtf(static_cast<float>(currentDist) / speed);
 }
 
 void CGraph::ReadVerticies(std::istream & in)

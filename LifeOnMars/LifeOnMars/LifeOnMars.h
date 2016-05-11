@@ -14,7 +14,7 @@ struct Edge
 {
 	size_t first;
 	size_t second;
-	long sqrDist;
+	int sqrDist;
 };
 
 class CGraph
@@ -40,4 +40,4 @@ private:
 };
 
 void RunProgram(CGraph & graph, std::string const& inputFileName, std::string const& outputFileName);
-long SqrOfDist(int x, int y);
+int SqrOfDist(int x, int y);
