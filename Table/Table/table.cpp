@@ -41,6 +41,7 @@ void CTable::FillTable()
 				((i > 1) ? 2 : 1) * (((j == 0) ? 0 : m_table[1][j - 1]) + ((j == m_colCount - 1) ? 0 : m_table[1][j + 1])) -
 				((j == 0 || j == m_colCount - 1) ? 0 : m_table[2][j]) * ((i == 2) ? 1 : 2)) %
 				m_divider;
+
 			if (m_table[0][j] < 0)
 				m_table[0][j] = m_divider + m_table[0][j];
 		}

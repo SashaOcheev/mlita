@@ -3,7 +3,7 @@ import random
 fileName = "input.txt"
 
 ln = 2000
-col = 1000
+col = 2000
 divider = 10
 
 f = open(fileName, "w")
