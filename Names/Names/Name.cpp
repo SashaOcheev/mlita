@@ -21,11 +21,9 @@ void CName::InitFromFile(const std::string &fileName)
 	
 void CName::RunAlgorithm()
 {
-	size_t i = m_mother_letters_pos.size();
-	while (i > 0)
+	size_t size = m_mother_letters_pos.size();
+	for (size_t i = size - 1; i < size; --i)
 	{
-		i--;
-
 		size_t j = 0;
 		while (j < m_mother_letters_pos[i].size() && m_mother_letters_pos[i][j] < m_mother_pos)
 			j++;
@@ -55,11 +53,16 @@ void CName::PrintChildNameToFile(const std::string &fileName)
 
 void CName::InitLettersPos(std::ifstream &file, std::vector<std::vector<size_t> > &letters_pos)
 {
-	size_t i = 0;
-	char ch;
-	while (((ch = file.get()) <= 'z') && (ch >= 'a') && (!file.eof()))
+	for (size_t i = 0; true; ++i)
 	{
-		letters_pos[ch - 'a'].push_back(i);
-		i++;
+		char ch = file.get();
+		if ((ch >= 'a') && (ch <= 'z') && (!file.eof()))
+		{
+			letters_pos[ch - 'a'].push_back(i);
+		}
+		else
+		{
+			break;
+		}
 	}
 }
