@@ -18,6 +18,10 @@
 #include <memory>
 #include <ctime>
 #include <list>
+#include <functional>
+#include <SFML/Graphics.hpp>
+#include <deque>
+
 
 
 // TODO: reference additional headers your program requires here
