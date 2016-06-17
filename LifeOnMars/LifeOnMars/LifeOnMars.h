@@ -15,6 +15,7 @@ struct Edge
 	size_t first;
 	size_t second;
 	int sqrDist;
+	bool isSetted = false;
 };
 
 class CGraph
@@ -26,11 +27,6 @@ public:
 	bool NextStep();
 	float GetResult();
 
-private:
-
-	void ReadVerticies(std::istream & in);
-	void InitEdges();
-	void SortEdges();
 
 	std::vector<Vertex> m_verticies;
 	std::vector<Edge> m_edges;
@@ -39,6 +35,11 @@ private:
 	size_t m_count;
 	size_t m_limit;
 	int m_speed;
+private:
+
+	void ReadVerticies(std::istream & in);
+	void InitEdges();
+	void SortEdges();
 
 	int m_lastStepDist;
 	int m_step;

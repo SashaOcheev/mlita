@@ -2,6 +2,7 @@
 #include "LifeOnMars.h"
 #include "tinyfiledialogs.h"
 #include "AppWindow.h"
+#include <sstream>
 
 namespace
 {
@@ -73,8 +74,23 @@ void CAppWindow::OnRunningDemo()
             SetState(State::WaitingOutput);
         }
     }
-    sf::Sprite sprite;
-    sprite.setTexture(m_activeFrame);
+
+	clear(sf::Color::White);
+
+	sf::Text atext;
+	atext.setFont(m_font);
+	atext.setCharacterSize(20);
+	atext.setStyle(sf::Text::Bold);
+	atext.setColor(sf::Color::Black);
+	atext.setPosition(100, 100);
+
+	atext.setString(std::to_string(m_graph->m_count));
+	draw(atext);
+	atext.setString(std::to_string(m_graph->m_limit));
+	atext.setPosition(200, 200);
+	draw(atext);
+
+    /*sf::Sprite sprite;
 
     const sf::Vector2f spriteSize = { float(sprite.getTextureRect().width), float(sprite.getTextureRect().height)};
     const sf::Vector2f windowSize = { float(getSize().x), float(getSize().y) };
@@ -83,27 +99,24 @@ void CAppWindow::OnRunningDemo()
     sprite.setPosition(windowSize * 0.5f);
     sprite.setScale(scale, scale);
 
-    draw(sprite);
+    draw(sprite);*/
 }
 
 void CAppWindow::RunAlgorithmDemo()
 {
-    m_pendingFramePaths.clear();
-    m_graph->RunPrima();
+    /*m_pendingFramePaths.clear();
+    m_graph->RunPrima();*/
     SetState(State::RunningDemo);
-    SwitchNextFrame();
+    //SwitchNextFrame();
 }
 
 bool CAppWindow::SwitchNextFrame()
 {
     m_clock.restart();
-    if (m_pendingFramePaths.empty())
+    if (!m_graph->NextStep())
     {
         return false;
     }
-
-    m_activeFrame.loadFromFile(m_pendingFramePaths.front());
-    m_pendingFramePaths.pop_front();
 
     return true;
 }
@@ -118,7 +131,6 @@ void CAppWindow::AskOpenInput()
         return;
     }
     m_graph = std::make_unique<CGraph>();
-    m_graph->SetStepHandler(std::bind(&CAppWindow::OnGraphAlgorithmStep, this, std::placeholders::_1));
 
     std::ifstream in(result);
     if (!in.is_open())
@@ -148,7 +160,7 @@ void CAppWindow::AskSaveOutput()
     }
     else
     {
-		out << std::fixed << std::setprecision(2) << m_graph->GetResult << std::endl;
+		out << std::fixed << std::setprecision(2) << m_graph->GetResult() << std::endl;
         tinyfd_messageBox("Success", "File saved OK", "ok", "info", 1);
     }
 }

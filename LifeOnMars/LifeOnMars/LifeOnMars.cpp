@@ -38,6 +38,7 @@ bool CGraph::NextStep()
 
 	if (firstCompNumb != secondCompNumb)
 	{
+		m_edges[m_step].isSetted = true;
 		m_count--;
 
 		for (size_t j = 0; j < m_components[secondCompNumb].size(); j++)
@@ -52,6 +53,7 @@ bool CGraph::NextStep()
 		m_lastStepDist = m_edges[m_step].sqrDist;
 	}
 
+	m_step++;
 	return m_count > m_limit;
 }
 

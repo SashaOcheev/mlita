@@ -2,6 +2,8 @@
 #include "stdafx.h"
 #include "AppMenu.h"
 
+class CGraph;
+
 class CAppWindow : public sf::RenderWindow
 {
 public:
@@ -27,10 +29,8 @@ private:
 
     State m_state = State::WaitingInput;
     sf::Clock m_clock;
-    std::deque<std::string> m_pendingFramePaths;
     sf::Font m_font;
     std::unique_ptr<CGraph> m_graph;
-    sf::Texture m_activeFrame;
     std::unique_ptr<CAppMenu> m_menu;
     size_t m_openActionId = 0;
     size_t m_saveActionId = 0;
