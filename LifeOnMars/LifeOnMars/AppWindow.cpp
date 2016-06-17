@@ -88,6 +88,7 @@ void CAppWindow::OnRunningDemo()
 			xoy.text.setString(std::to_string(m_graph->m_components[i][j]));
 			xoy.text.setPosition(xoy.circle.getPosition().x + textShift, xoy.circle.getPosition().y + textShift);
 			xoy.text.setColor(sf::Color(currentColor[0], currentColor[1], currentColor[2]));
+
 			draw(xoy.circle);
 			draw(xoy.text);
 		}
@@ -105,36 +106,27 @@ void CAppWindow::OnRunningDemo()
 		auto firstVert = m_graph->m_verticies[m_graph->m_edges[i].first];
 		auto secondVert = m_graph->m_verticies[m_graph->m_edges[i].second];
 		sf::Vector2f lengths = { static_cast<float>(secondVert.x - firstVert.x), static_cast<float>(secondVert.y - firstVert.y) };
-		xoy.rectangle.setSize({ hypotf(lengths.x, lengths.y) * xoy.UNIT, 2.f });
+		xoy.rectangle.setSize({ hypotf(lengths.x, lengths.y) * xoy.UNIT, xoy.THICKNESS });
 		xoy.rectangle.setRotation(atan(lengths.y / lengths.x) * 180 / 3.14159265);
 		xoy.rectangle.setPosition(xoy.ConvertCoor(firstVert.x, firstVert.y));
+		xoy.rectangle.move(xoy.RADIUS, xoy.RADIUS);
 		draw(xoy.rectangle);
 	}
 
 	xoy.ResetColor();
-	/*sf::Text atext;
-	atext.setFont(m_font);
-	atext.setCharacterSize(20);
-	atext.setStyle(sf::Text::Bold);
-	atext.setColor(sf::Color::Black);
-	atext.setPosition(100, 100);
 
-	atext.setString(std::to_string(m_graph->m_count));
-	draw(atext);
-	atext.setString(std::to_string(m_graph->m_limit));
-	atext.setPosition(200, 200);
-	draw(atext);*/
-
-    /*sf::Sprite sprite;
-
-    const sf::Vector2f spriteSize = { float(sprite.getTextureRect().width), float(sprite.getTextureRect().height)};
-    const sf::Vector2f windowSize = { float(getSize().x), float(getSize().y) };
-    const float scale = std::min(windowSize.x / spriteSize.x, windowSize.y / spriteSize.y);
-    sprite.setOrigin(spriteSize * 0.5f);
-    sprite.setPosition(windowSize * 0.5f);
-    sprite.setScale(scale, scale);
-
-    draw(sprite);*/
+	xoy.text.setString("limit = " + std::to_string(m_graph->m_limit));
+	xoy.text.setPosition(0.f, 570.f);
+	draw(xoy.text);
+	xoy.text.setString("current count = " + std::to_string(m_graph->m_count));
+	xoy.text.setPosition(200.f, 570.f);
+	draw(xoy.text);
+	xoy.text.setString("current time = " + std::to_string(m_graph->GetResult()));
+	xoy.text.setPosition(400.f, 570.f);
+	draw(xoy.text);
+	xoy.text.setString(std::to_string(m_graph->currentEdge.first) + "-" + std::to_string(m_graph->currentEdge.second));
+	xoy.text.setPosition(650.f, 570.f);
+	draw(xoy.text);
 }
 
 void CAppWindow::RunAlgorithmDemo()

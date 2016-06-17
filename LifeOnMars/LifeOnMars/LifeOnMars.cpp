@@ -36,6 +36,7 @@ bool CGraph::NextStep()
 {
 	auto firstCompNumb = m_verticies[m_edges[m_step].first].compNumber;
 	auto secondCompNumb = m_verticies[m_edges[m_step].second].compNumber;
+	currentEdge = { firstCompNumb, secondCompNumb };
 
 	if (firstCompNumb != secondCompNumb)
 	{

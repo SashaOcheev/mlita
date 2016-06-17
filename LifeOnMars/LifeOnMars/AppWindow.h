@@ -19,12 +19,12 @@ struct XOY
 	void Reset(const std::pair<int, int> & minMaxX, const std::pair<int, int> & minMaxY, int elementsCount);
 	sf::Vector2f ConvertCoor(int x, int y);
 	void ResetColor();
+	const float RADIUS = 10.0;
+	const float THICKNESS = 2.0;
 private:
 	sf::Font m_font;
 	std::vector<int> currentColor;
 	const float BOUND = 50.f;
-	const float RADIUS = 10.0;
-	const float THICKNESS = 2.0;
 	const int TEXT_SIZE = 20;
 };
 

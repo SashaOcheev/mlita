@@ -26,6 +26,7 @@ public:
 	float RunAlgorithm();
 	bool NextStep();
 	float GetResult();
+	std::pair<size_t, size_t> currentEdge;
 
 	std::vector<Vertex> m_verticies;
 	std::vector<Edge> m_edges;
