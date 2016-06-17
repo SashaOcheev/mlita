@@ -23,6 +23,8 @@ public:
 
 	void InitFromText(std::istream & in);
 	float RunAlgorithm();
+	bool NextStep();
+	float GetResult();
 
 private:
 
@@ -37,6 +39,9 @@ private:
 	size_t m_count;
 	size_t m_limit;
 	int m_speed;
+
+	int m_lastStepDist;
+	int m_step;
 };
 
 void RunProgram(CGraph & graph, std::string const& inputFileName, std::string const& outputFileName);

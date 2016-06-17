@@ -13,6 +13,9 @@ int SqrOfDist(int x, int y)
 void CGraph::InitFromText(std::istream & in)
 {
 	in >> m_count >> m_limit >> m_speed;
+	m_speed = m_speed * m_speed * 4;
+	m_lastStepDist = 0;
+	m_step = 0;
 	ReadVerticies(in);
 
 	InitEdges();
@@ -21,32 +24,40 @@ void CGraph::InitFromText(std::istream & in)
 
 float CGraph::RunAlgorithm()
 {
-	int speed = m_speed * m_speed * 4;
-
-	int currentDist = 0;
-	size_t compCount = m_count;
-	for (size_t i = 0; compCount > m_limit; i++)
+	while (NextStep())
 	{
-		auto firstCompNumb = m_verticies[m_edges[i].first].compNumber;
-		auto secondCompNumb = m_verticies[m_edges[i].second].compNumber;
-
-		if (firstCompNumb != secondCompNumb)
-		{
-			compCount--;
-
-			for (size_t j = 0; j < m_components[secondCompNumb].size(); j++)
-			{
-				m_verticies[m_edges[i].second].compNumber = firstCompNumb;
-				m_verticies[m_components[secondCompNumb][j]].compNumber = firstCompNumb;
-				m_components[firstCompNumb].push_back(m_components[secondCompNumb][j]);
-			}
-
-			m_components[secondCompNumb].clear();
-
-			currentDist = m_edges[i].sqrDist;
-		}
 	}
-	return sqrtf(static_cast<float>(currentDist) / speed);
+
+	return GetResult();
+}
+
+bool CGraph::NextStep()
+{
+	auto firstCompNumb = m_verticies[m_edges[m_step].first].compNumber;
+	auto secondCompNumb = m_verticies[m_edges[m_step].second].compNumber;
+
+	if (firstCompNumb != secondCompNumb)
+	{
+		m_count--;
+
+		for (size_t j = 0; j < m_components[secondCompNumb].size(); j++)
+		{
+			m_verticies[m_edges[m_step].second].compNumber = firstCompNumb;
+			m_verticies[m_components[secondCompNumb][j]].compNumber = firstCompNumb;
+			m_components[firstCompNumb].push_back(m_components[secondCompNumb][j]);
+		}
+
+		m_components[secondCompNumb].clear();
+
+		m_lastStepDist = m_edges[m_step].sqrDist;
+	}
+
+	return m_count > m_limit;
+}
+
+float CGraph::GetResult()
+{
+	return sqrtf(static_cast<float>(m_lastStepDist) / m_speed);
 }
 
 void CGraph::ReadVerticies(std::istream & in)

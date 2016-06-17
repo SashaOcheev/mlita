@@ -2,8 +2,6 @@
 #include "stdafx.h"
 #include "AppMenu.h"
 
-class CBoostGraph;
-
 class CAppWindow : public sf::RenderWindow
 {
 public:
@@ -31,7 +29,7 @@ private:
     sf::Clock m_clock;
     std::deque<std::string> m_pendingFramePaths;
     sf::Font m_font;
-    std::unique_ptr<CBoostGraph> m_graph;
+    std::unique_ptr<CGraph> m_graph;
     sf::Texture m_activeFrame;
     std::unique_ptr<CAppMenu> m_menu;
     size_t m_openActionId = 0;

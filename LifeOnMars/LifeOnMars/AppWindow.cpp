@@ -1,8 +1,7 @@
 #include "stdafx.h"
-#include "AppWindow.h"
 #include "LifeOnMars.h"
 #include "tinyfiledialogs.h"
-#include <fstream>
+#include "AppWindow.h"
 
 namespace
 {
@@ -118,17 +117,17 @@ void CAppWindow::AskOpenInput()
     {
         return;
     }
-    m_graph = std::make_unique<CBoostGraph>();
+    m_graph = std::make_unique<CGraph>();
     m_graph->SetStepHandler(std::bind(&CAppWindow::OnGraphAlgorithmStep, this, std::placeholders::_1));
 
     std::ifstream in(result);
-    if (!in.is_open() || !m_graph->ReadText(in))
+    if (!in.is_open())
     {
-        m_graph.reset();
         tinyfd_messageBox("Error", "I/O error when reading input file", "ok", "error", 1);
     }
     else
     {
+		m_graph->InitFromText(in);
         RunAlgorithmDemo();
     }
 }
@@ -143,12 +142,13 @@ void CAppWindow::AskSaveOutput()
         return;
     }
     std::ofstream out(result);
-    if (!out.is_open() || !m_graph->PrintResults(out))
+    if (!out.is_open())
     {
         tinyfd_messageBox("Error", "I/O error when writing output file", "ok", "error", 1);
     }
     else
     {
+		out << std::fixed << std::setprecision(2) << m_graph->GetResult << std::endl;
         tinyfd_messageBox("Success", "File saved OK", "ok", "info", 1);
     }
 }

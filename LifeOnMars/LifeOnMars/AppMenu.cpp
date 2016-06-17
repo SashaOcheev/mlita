@@ -2,6 +2,7 @@
 #include "AppMenu.h"
 #include <boost/range/numeric.hpp>
 
+
 #ifdef max
 #undef max
 #endif
