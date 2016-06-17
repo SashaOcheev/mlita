@@ -217,13 +217,16 @@ void XOY::Reset(const std::pair<int, int> & minMaxX, const std::pair<int, int> &
 	WINDOW_START = { BOUND + (WORK_SIZE.x - LENGTH.x) / 2, BOUND + (WORK_SIZE.y - LENGTH.y) / 2 };
 	SOURCE_START = { static_cast<float>(minMaxX.first), static_cast<float>(minMaxY.first) };
 	
+	std::cout << std::fixed << std::setprecision(2);
 	/*std::cout << "UNIT " << std::fixed << std::setprecision(2) << UNIT << std::endl;
-	std::cout << "UNIT X Y " << UNIT_X_Y.x << " " << UNIT_X_Y.y << std::endl;
+	std::cout << "UNIT_X_Y " << UNIT_X_Y.x << " " << UNIT_X_Y.y << std::endl;
 	std::cout << "LENGTH " << LENGTH.x << " " << LENGTH.y << std::endl;
-	std::cout << "WINDOW " << WINDOW_START.x << " " << WINDOW_START.y << std::endl;
-	std::cout << "SOURCE " << SOURCE_START.x << " " << SOURCE_START.y << std::endl;*/
+	std::cout << "WINDOW_START " << WINDOW_START.x << " " << WINDOW_START.y << std::endl;
+	std::cout << "SOURCE_START " << SOURCE_START.x << " " << SOURCE_START.y << std::endl;
+	std::cout << "COLOR_UNIT " << std::endl;*/
 
-	COLOR_UNIT = static_cast<int>(floor(pow(static_cast<float>(elementsCount), 1.f / 3.f)));
+	COLOR_UNIT = static_cast<int> (256.f / (ceil(pow(static_cast<float>(elementsCount), 1.f / 3.f))));
+	
 	ResetColor();
 
 	circle.setRadius(5);
