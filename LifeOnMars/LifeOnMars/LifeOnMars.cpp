@@ -15,6 +15,7 @@ void CGraph::InitFromText(std::istream & in)
 	in >> m_count >> m_limit >> m_speed;
 	m_speed = m_speed * m_speed * 4;
 	m_lastStepDist = 0;
+	m_minMaxX = m_minMaxY = { pow(10, 5), pow(-10, 5) };
 	m_step = 0;
 	ReadVerticies(in);
 
@@ -71,6 +72,9 @@ void CGraph::ReadVerticies(std::istream & in)
 	{
 		int x, y;
 		in >> x >> y;
+
+		SetMinMax(x, y);
+
 		m_verticies[i].x = x;
 		m_verticies[i].y = y;
 		m_verticies[i].compNumber = i;
@@ -101,6 +105,14 @@ void CGraph::SortEdges()
 	{
 		return first.sqrDist < second.sqrDist;
 	});
+}
+
+void CGraph::SetMinMax(int x, int y)
+{
+	m_minMaxX.first = (x < m_minMaxX.first) ? x : m_minMaxX.first;
+	m_minMaxX.second = (x > m_minMaxX.second) ? x : m_minMaxX.second;
+	m_minMaxY.first = (y < m_minMaxY.first) ? y : m_minMaxY.first;
+	m_minMaxY.second = (y > m_minMaxY.second) ? y : m_minMaxY.second;
 }
 
 void RunProgram(CGraph & graph, std::string const& inputFileName, std::string const& outputFileName)

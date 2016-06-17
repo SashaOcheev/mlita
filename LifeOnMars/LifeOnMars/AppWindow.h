@@ -4,6 +4,24 @@
 
 class CGraph;
 
+struct XOY
+{
+	float UNIT;
+	sf::Vector2f WINDOW_START;
+	sf::Vector2f SOURCE_START;
+	float COLOR_UNIT;
+	sf::CircleShape circle;
+
+	XOY();
+	std::vector<int> GetColor(int number);
+	void Reset(const std::pair<int, int> & minMaxX, const std::pair<int, int> & minMaxY, int elementsCount);
+	sf::Vector2f ConvertCoor(int x, int y);
+	void ResetColor();
+private:
+	std::vector<int> currentColor;
+	const float BOUND = 50.f;
+};
+
 class CAppWindow : public sf::RenderWindow
 {
 public:
@@ -28,6 +46,7 @@ private:
     void AskSaveOutput();
 
     State m_state = State::WaitingInput;
+	XOY xoy;
     sf::Clock m_clock;
     sf::Font m_font;
     std::unique_ptr<CGraph> m_graph;
