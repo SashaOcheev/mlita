@@ -77,14 +77,40 @@ void CAppWindow::OnRunningDemo()
 
 	clear(sf::Color::White);
 
-	
-	for (size_t i = 0; i < m_graph->m_verticies.size(); i++)
-	{
-		xoy.circle.setPosition(xoy.ConvertCoor(m_graph->m_verticies[i].x, m_graph->m_verticies[i].y));
-		auto currentColor = xoy.GetColor(i);
-		xoy.circle.setFillColor(sf::Color(currentColor[0], currentColor[1], currentColor[2]));
-		draw(xoy.circle);
+	for (size_t i = 0; i < m_graph->m_components.size(); i++)
+	{	
+		for (size_t j = 0; j < m_graph->m_components[i].size(); j++)
+		{
+			auto textShift = -10;
+			auto currentColor = xoy.GetColor(i);
+			xoy.circle.setFillColor(sf::Color(currentColor[0], currentColor[1], currentColor[2]));
+			xoy.circle.setPosition(xoy.ConvertCoor(m_graph->m_verticies[m_graph->m_components[i][j]].x, m_graph->m_verticies[m_graph->m_components[i][j]].y));
+			xoy.text.setString(std::to_string(m_graph->m_components[i][j]));
+			xoy.text.setPosition(xoy.circle.getPosition().x + textShift, xoy.circle.getPosition().y + textShift);
+			xoy.text.setColor(sf::Color(currentColor[0], currentColor[1], currentColor[2]));
+			draw(xoy.circle);
+			draw(xoy.text);
+		}
 	}
+
+	for (size_t i = 0; i < m_graph->m_edges.size(); i++)
+	{
+		if (!m_graph->m_edges[i].isSetted)
+		{
+			continue;
+		}
+		size_t component = (m_graph->m_components[m_graph->m_edges[i].first].empty()) ? m_graph->m_edges[i].second : m_graph->m_edges[i].first;
+		auto currentColor = xoy.GetColor(component);
+		xoy.rectangle.setFillColor(sf::Color(currentColor[0], currentColor[1], currentColor[2]));
+		auto firstVert = m_graph->m_verticies[m_graph->m_edges[i].first];
+		auto secondVert = m_graph->m_verticies[m_graph->m_edges[i].second];
+		sf::Vector2f lengths = { static_cast<float>(secondVert.x - firstVert.x), static_cast<float>(secondVert.y - firstVert.y) };
+		xoy.rectangle.setSize({ hypotf(lengths.x, lengths.y) * xoy.UNIT, 2.f });
+		xoy.rectangle.setRotation(atan(lengths.y / lengths.x) * 180 / 3.14159265);
+		xoy.rectangle.setPosition(xoy.ConvertCoor(firstVert.x, firstVert.y));
+		draw(xoy.rectangle);
+	}
+
 	xoy.ResetColor();
 	/*sf::Text atext;
 	atext.setFont(m_font);
@@ -180,6 +206,12 @@ XOY::XOY()
 	UNIT = 0.f;
 	WINDOW_START = { 0.f, 0.f };
 	SOURCE_START = { 0.f, 0.f };
+	m_font.loadFromFile("TimesNewRomanRegular.ttf");
+	text.setFont(m_font);
+	text.setCharacterSize(20);
+	text.setColor(sf::Color::Black);
+
+	circle.setRadius(RADIUS);
 }
 
 std::vector<int> XOY::GetColor(int number)
@@ -228,6 +260,4 @@ void XOY::Reset(const std::pair<int, int> & minMaxX, const std::pair<int, int> &
 	COLOR_UNIT = static_cast<int> (256.f / (ceil(pow(static_cast<float>(elementsCount), 1.f / 3.f))));
 	
 	ResetColor();
-
-	circle.setRadius(5);
 }

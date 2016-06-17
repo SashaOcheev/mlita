@@ -11,6 +11,8 @@ struct XOY
 	sf::Vector2f SOURCE_START;
 	float COLOR_UNIT;
 	sf::CircleShape circle;
+	sf::Text text;
+	sf::RectangleShape rectangle;
 
 	XOY();
 	std::vector<int> GetColor(int number);
@@ -18,8 +20,12 @@ struct XOY
 	sf::Vector2f ConvertCoor(int x, int y);
 	void ResetColor();
 private:
+	sf::Font m_font;
 	std::vector<int> currentColor;
 	const float BOUND = 50.f;
+	const float RADIUS = 10.0;
+	const float THICKNESS = 2.0;
+	const int TEXT_SIZE = 20;
 };
 
 class CAppWindow : public sf::RenderWindow
