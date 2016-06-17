@@ -36,7 +36,6 @@ bool CGraph::NextStep()
 {
 	auto firstCompNumb = m_verticies[m_edges[m_step].first].compNumber;
 	auto secondCompNumb = m_verticies[m_edges[m_step].second].compNumber;
-	currentEdge = { firstCompNumb, secondCompNumb };
 
 	if (firstCompNumb != secondCompNumb)
 	{
@@ -54,6 +53,8 @@ bool CGraph::NextStep()
 
 		m_lastStepDist = m_edges[m_step].sqrDist;
 	}
+	if (m_step < m_edges.size())
+		currentEdge = { m_edges[m_step + 1].first, m_edges[m_step + 1].second };
 
 	m_step++;
 	return m_count > m_limit;
