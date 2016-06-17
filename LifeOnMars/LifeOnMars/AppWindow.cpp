@@ -184,17 +184,22 @@ XOY::XOY()
 
 std::vector<int> XOY::GetColor(int number)
 {
+	int power = number / 3;
 	for (size_t i = 0; i < currentColor.size(); i++)
 	{
-		currentColor[i] += number / 3;
+		currentColor[i] += power * COLOR_UNIT;
 	}
-	currentColor[number % 3] += COLOR_UNIT;
+	for (size_t i = 0; i < number % 3; i++)
+	{
+		currentColor[i] += COLOR_UNIT;
+	}
+	
 	return currentColor;
 }
 
 sf::Vector2f XOY::ConvertCoor(int x, int y)
 {
-	return WINDOW_START + sf::Vector2f(x, y) - SOURCE_START;
+	return WINDOW_START + (sf::Vector2f(x, y) - SOURCE_START) * UNIT;
 }
 
 void XOY::ResetColor()
@@ -204,15 +209,19 @@ void XOY::ResetColor()
 
 void XOY::Reset(const std::pair<int, int> & minMaxX, const std::pair<int, int> & minMaxY, int elementsCount)
 {
-	auto sourceLengthX = minMaxX.second - minMaxX.first;
-	auto sourceLengthY = minMaxY.second - minMaxY.first;
-	const float unitX = (WINDOW_WIDTH - BOUND * 2) / sourceLengthX;
-	const float unitY = (WINDOW_HEIGHT - BOUND * 2) / sourceLengthY;
-	const float UNIT = (unitX < unitY) ? unitX : unitY;
-	const float lengthX = (WINDOW_WIDTH - BOUND * 2) / UNIT;
-	const float lengthY = (WINDOW_HEIGHT - BOUND * 2) / UNIT;
-	WINDOW_START = { (WINDOW_WIDTH - lengthX) / 2, (WINDOW_WIDTH - lengthY) / 2 };
+	const sf::Vector2f SOURCE_SIZE = { static_cast<float>(minMaxX.second - minMaxX.first), static_cast<float>(minMaxY.second - minMaxY.first) };
+	const sf::Vector2f WORK_SIZE = { WINDOW_WIDTH - BOUND * 2, WINDOW_HEIGHT - BOUND * 2 };
+	const sf::Vector2f UNIT_X_Y = { WORK_SIZE.x / SOURCE_SIZE.x, WORK_SIZE.y / SOURCE_SIZE.y };
+	UNIT = (UNIT_X_Y.x < UNIT_X_Y.y) ? UNIT_X_Y.x : UNIT_X_Y.y;
+	const sf::Vector2f LENGTH = { WORK_SIZE.x / UNIT_X_Y.x * UNIT, WORK_SIZE.y / UNIT_X_Y.y * UNIT };
+	WINDOW_START = { BOUND + (WORK_SIZE.x - LENGTH.x) / 2, BOUND + (WORK_SIZE.y - LENGTH.y) / 2 };
 	SOURCE_START = { static_cast<float>(minMaxX.first), static_cast<float>(minMaxY.first) };
+	
+	/*std::cout << "UNIT " << std::fixed << std::setprecision(2) << UNIT << std::endl;
+	std::cout << "UNIT X Y " << UNIT_X_Y.x << " " << UNIT_X_Y.y << std::endl;
+	std::cout << "LENGTH " << LENGTH.x << " " << LENGTH.y << std::endl;
+	std::cout << "WINDOW " << WINDOW_START.x << " " << WINDOW_START.y << std::endl;
+	std::cout << "SOURCE " << SOURCE_START.x << " " << SOURCE_START.y << std::endl;*/
 
 	COLOR_UNIT = static_cast<int>(floor(pow(static_cast<float>(elementsCount), 1.f / 3.f)));
 	ResetColor();
